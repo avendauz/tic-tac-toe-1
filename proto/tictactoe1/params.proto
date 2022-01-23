@@ -1,0 +1,12 @@
+syntax = "proto3";
+package avendauz.tictactoe1.tictactoe1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/avendauz/tic-tac-toe-1/x/tictactoe1/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+}
