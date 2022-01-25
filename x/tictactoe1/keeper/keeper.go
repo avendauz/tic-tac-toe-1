@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"fmt"
-
 	"github.com/tendermint/tendermint/libs/log"
 
 	"github.com/avendauz/tic-tac-toe-1/x/tictactoe1/types"

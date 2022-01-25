@@ -20,3 +20,13 @@ const (
 func KeyPrefix(p string) []byte {
 	return []byte(p)
 }
+
+func OpenGamePrefix(p string, initiator string) []byte {
+	return append(KeyPrefix(p), []byte(initiator)...)
+}
+
+const (
+	OpenGameKey  = "Open-"
+	CurrGameKey = "Curr-"
+	DoneGameKey = "Done-"
+)

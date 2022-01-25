@@ -1,0 +1,26 @@
+syntax = "proto3";
+package avendauz.tictactoe1.tictactoe1;
+
+// this line is used by starport scaffolding # proto/tx/import
+
+option go_package = "github.com/avendauz/tic-tac-toe-1/x/tictactoe1/types";
+
+message OpenGame {
+  string initiator = 1;
+  string uuid = 2;
+}
+
+message CurrGame {
+  string initiator = 1;
+  string challenger = 2;
+  string uuid = 3;
+  bytes board = 4;
+}
+
+message DoneGame {
+  string initiator = 1;
+  string challenger = 2;
+  string uuid = 3;
+  bytes board = 4;
+  string winner = 5;
+}
