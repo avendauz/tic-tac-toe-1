@@ -1,0 +1,5 @@
+
+
+interface Player {
+    uuid: string
+}
