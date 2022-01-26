@@ -12,6 +12,9 @@ export declare type Tictactoe1MsgOpenGameResponse = object;
  * Params defines the parameters for the module.
  */
 export declare type Tictactoe1Params = object;
+export interface Tictactoe1QueryAllOpenGamesResponse {
+    games?: string[];
+}
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
@@ -77,6 +80,14 @@ export declare class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export declare class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryAllOpenGames
+     * @request GET:/avendauz/tictactoe1/tictactoe1/allopengames
+     */
+    queryAllOpenGames: (params?: RequestParams) => Promise<HttpResponse<Tictactoe1QueryAllOpenGamesResponse, RpcStatus>>;
     /**
      * No description
      *

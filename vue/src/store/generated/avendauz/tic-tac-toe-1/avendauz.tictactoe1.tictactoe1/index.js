@@ -40,6 +40,7 @@ function getStructure(template) {
 const getDefaultState = () => {
     return {
         Params: {},
+        AllOpenGames: {},
         _Structure: {
             OpenGame: getStructure(OpenGame.fromPartial({})),
             CurrGame: getStructure(CurrGame.fromPartial({})),
@@ -75,6 +76,12 @@ export default {
                 params.query = null;
             }
             return state.Params[JSON.stringify(params)] ?? {};
+        },
+        getAllOpenGames: (state) => (params = { params: {} }) => {
+            if (!params.query) {
+                params.query = null;
+            }
+            return state.AllOpenGames[JSON.stringify(params)] ?? {};
         },
         getTypeStructure: (state) => (type) => {
             return state._Structure[type].fields;
@@ -121,6 +128,20 @@ export default {
             }
             catch (e) {
                 throw new SpVuexError('QueryClient:QueryParams', 'API Node Unavailable. Could not perform query: ' + e.message);
+            }
+        },
+        async QueryAllOpenGames({ commit, rootGetters, getters }, { options: { subscribe, all } = { subscribe: false, all: false }, params, query = null }) {
+            try {
+                const key = params ?? {};
+                const queryClient = await initQueryClient(rootGetters);
+                let value = (await queryClient.queryAllOpenGames()).data;
+                commit('QUERY', { query: 'AllOpenGames', key: { params: { ...key }, query }, value });
+                if (subscribe)
+                    commit('SUBSCRIBE', { action: 'QueryAllOpenGames', payload: { options: { all }, params: { ...key }, query } });
+                return getters['getAllOpenGames']({ params: { ...key }, query }) ?? {};
+            }
+            catch (e) {
+                throw new SpVuexError('QueryClient:QueryAllOpenGames', 'API Node Unavailable. Could not perform query: ' + e.message);
             }
         },
         async sendMsgOpenGame({ rootGetters }, { value, fee = [], memo = '' }) {

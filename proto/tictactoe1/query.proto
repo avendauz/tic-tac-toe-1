@@ -15,6 +15,9 @@ service Query {
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/avendauz/tictactoe1/tictactoe1/params";
   }
+  rpc AllOpenGames(QueryAllOpenGamesRequest) returns (QueryAllOpenGamesResponse) {
+    option (google.api.http).get = "/avendauz/tictactoe1/tictactoe1/allopengames";
+  }
   // this line is used by starport scaffolding # 2
 }
 
@@ -28,3 +31,9 @@ message QueryParamsResponse {
 }
 
 // this line is used by starport scaffolding # 3
+
+message QueryAllOpenGamesRequest {}
+
+message QueryAllOpenGamesResponse {
+  repeated string games = 1;
+}

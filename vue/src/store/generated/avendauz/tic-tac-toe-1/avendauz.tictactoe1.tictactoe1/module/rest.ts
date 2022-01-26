@@ -27,6 +27,10 @@ export type Tictactoe1MsgOpenGameResponse = object;
  */
 export type Tictactoe1Params = object;
 
+export interface Tictactoe1QueryAllOpenGamesResponse {
+  games?: string[];
+}
+
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
@@ -231,6 +235,21 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryAllOpenGames
+   * @request GET:/avendauz/tictactoe1/tictactoe1/allopengames
+   */
+  queryAllOpenGames = (params: RequestParams = {}) =>
+    this.request<Tictactoe1QueryAllOpenGamesResponse, RpcStatus>({
+      path: `/avendauz/tictactoe1/tictactoe1/allopengames`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
   /**
    * No description
    *

@@ -13,6 +13,12 @@ export interface QueryParamsResponse {
   params: Params | undefined;
 }
 
+export interface QueryAllOpenGamesRequest {}
+
+export interface QueryAllOpenGamesResponse {
+  games: string[];
+}
+
 const baseQueryParamsRequest: object = {};
 
 export const QueryParamsRequest = {
@@ -110,10 +116,141 @@ export const QueryParamsResponse = {
   },
 };
 
+const baseQueryAllOpenGamesRequest: object = {};
+
+export const QueryAllOpenGamesRequest = {
+  encode(
+    _: QueryAllOpenGamesRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllOpenGamesRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllOpenGamesRequest,
+    } as QueryAllOpenGamesRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): QueryAllOpenGamesRequest {
+    const message = {
+      ...baseQueryAllOpenGamesRequest,
+    } as QueryAllOpenGamesRequest;
+    return message;
+  },
+
+  toJSON(_: QueryAllOpenGamesRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(
+    _: DeepPartial<QueryAllOpenGamesRequest>
+  ): QueryAllOpenGamesRequest {
+    const message = {
+      ...baseQueryAllOpenGamesRequest,
+    } as QueryAllOpenGamesRequest;
+    return message;
+  },
+};
+
+const baseQueryAllOpenGamesResponse: object = { games: "" };
+
+export const QueryAllOpenGamesResponse = {
+  encode(
+    message: QueryAllOpenGamesResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.games) {
+      writer.uint32(10).string(v!);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllOpenGamesResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllOpenGamesResponse,
+    } as QueryAllOpenGamesResponse;
+    message.games = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.games.push(reader.string());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllOpenGamesResponse {
+    const message = {
+      ...baseQueryAllOpenGamesResponse,
+    } as QueryAllOpenGamesResponse;
+    message.games = [];
+    if (object.games !== undefined && object.games !== null) {
+      for (const e of object.games) {
+        message.games.push(String(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllOpenGamesResponse): unknown {
+    const obj: any = {};
+    if (message.games) {
+      obj.games = message.games.map((e) => e);
+    } else {
+      obj.games = [];
+    }
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllOpenGamesResponse>
+  ): QueryAllOpenGamesResponse {
+    const message = {
+      ...baseQueryAllOpenGamesResponse,
+    } as QueryAllOpenGamesResponse;
+    message.games = [];
+    if (object.games !== undefined && object.games !== null) {
+      for (const e of object.games) {
+        message.games.push(e);
+      }
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
+  AllOpenGames(
+    request: QueryAllOpenGamesRequest
+  ): Promise<QueryAllOpenGamesResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -129,6 +266,20 @@ export class QueryClientImpl implements Query {
       data
     );
     return promise.then((data) => QueryParamsResponse.decode(new Reader(data)));
+  }
+
+  AllOpenGames(
+    request: QueryAllOpenGamesRequest
+  ): Promise<QueryAllOpenGamesResponse> {
+    const data = QueryAllOpenGamesRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "avendauz.tictactoe1.tictactoe1.Query",
+      "AllOpenGames",
+      data
+    );
+    return promise.then((data) =>
+      QueryAllOpenGamesResponse.decode(new Reader(data))
+    );
   }
 }
 

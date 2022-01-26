@@ -140,6 +140,19 @@ export class Api extends HttpClient {
          * No description
          *
          * @tags Query
+         * @name QueryAllOpenGames
+         * @request GET:/avendauz/tictactoe1/tictactoe1/allopengames
+         */
+        this.queryAllOpenGames = (params = {}) => this.request({
+            path: `/avendauz/tictactoe1/tictactoe1/allopengames`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
          * @name QueryParams
          * @summary Parameters queries the parameters of the module.
          * @request GET:/avendauz/tictactoe1/tictactoe1/params

@@ -4,6 +4,39 @@ info:
   name: ''
   description: ''
 paths:
+  /avendauz/tictactoe1/tictactoe1/allopengames:
+    get:
+      operationId: AvendauzTictactoe1Tictactoe1AllOpenGames
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              games:
+                type: array
+                items:
+                  type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
   /avendauz/tictactoe1/tictactoe1/params:
     get:
       summary: Parameters queries the parameters of the module.
@@ -12616,6 +12649,13 @@ definitions:
   avendauz.tictactoe1.tictactoe1.Params:
     type: object
     description: Params defines the parameters for the module.
+  avendauz.tictactoe1.tictactoe1.QueryAllOpenGamesResponse:
+    type: object
+    properties:
+      games:
+        type: array
+        items:
+          type: string
   avendauz.tictactoe1.tictactoe1.QueryParamsResponse:
     type: object
     properties:
