@@ -12644,6 +12644,8 @@ paths:
       tags:
         - Query
 definitions:
+  avendauz.tictactoe1.tictactoe1.MsgAcceptGameResponse:
+    type: object
   avendauz.tictactoe1.tictactoe1.MsgOpenGameResponse:
     type: object
   avendauz.tictactoe1.tictactoe1.Params:

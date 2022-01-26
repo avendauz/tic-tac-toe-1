@@ -2,8 +2,10 @@
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
+import { MsgAcceptGame } from "./types/tictactoe1/tx";
 import { MsgOpenGame } from "./types/tictactoe1/tx";
 const types = [
+    ["/avendauz.tictactoe1.tictactoe1.MsgAcceptGame", MsgAcceptGame],
     ["/avendauz.tictactoe1.tictactoe1.MsgOpenGame", MsgOpenGame],
 ];
 export const MissingWalletError = new Error("wallet is required");
@@ -25,6 +27,7 @@ const txClient = async (wallet, { addr: addr } = { addr: "http://localhost:26657
     const { address } = (await wallet.getAccounts())[0];
     return {
         signAndBroadcast: (msgs, { fee, memo } = { fee: defaultFee, memo: "" }) => client.signAndBroadcast(address, msgs, fee, memo),
+        msgAcceptGame: (data) => ({ typeUrl: "/avendauz.tictactoe1.tictactoe1.MsgAcceptGame", value: MsgAcceptGame.fromPartial(data) }),
         msgOpenGame: (data) => ({ typeUrl: "/avendauz.tictactoe1.tictactoe1.MsgOpenGame", value: MsgOpenGame.fromPartial(data) }),
     };
 };

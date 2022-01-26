@@ -9,6 +9,8 @@ option go_package = "github.com/avendauz/tic-tac-toe-1/x/tictactoe1/types";
 service Msg {
     // this line is used by starport scaffolding # proto/tx/rpc
   rpc OpenGame(MsgOpenGame) returns (MsgOpenGameResponse);
+  rpc AcceptGame(MsgAcceptGame) returns (MsgAcceptGameResponse);
+
 }
 
 // this line is used by starport scaffolding # proto/tx/message
@@ -19,4 +21,14 @@ message MsgOpenGame {
 }
 
 message MsgOpenGameResponse {
+}
+
+message MsgAcceptGame {
+  string creator = 1;
+  string uuid = 2;
+  string challenger = 3;
+}
+
+message MsgAcceptGameResponse {
+
 }

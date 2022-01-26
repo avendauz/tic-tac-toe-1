@@ -33,6 +33,27 @@ func (k Keeper) AddOGame (
 	store.Set(CreateOpenGameKey(initiator, uuid), make([]byte, 0))
 }
 
+func (k Keeper) HasOpenGame (
+	ctx sdk.Context,
+	initiator string,
+	uuid string,
+	) bool {
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.OpenGameKey))
+
+	return store.Has(CreateOpenGameKey(initiator, uuid))
+}
+
+func (k Keeper) RemoveOpenGame (
+	ctx sdk.Context,
+	initiator string,
+	uuid string,
+	) {
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.OpenGameKey))
+	store.Delete(CreateOpenGameKey(initiator, uuid))
+}
+
 func (k Keeper) GetAllOGames (ctx sdk.Context) []string {
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.OpenGameKey))
@@ -63,4 +84,22 @@ func (k Keeper) GetAllInitiatorsOGames (ctx sdk.Context, initiator string) []str
 	}
 
 	return keys
+}
+
+func (k Keeper) AddCurrGame (ctx sdk.Context, initiator string, uuid string, challenger string) {
+	hashed := HashOpponents(initiator, challenger)
+
+	board := make([]byte, 9)		// initialize board, 9 cells
+
+	game := types.CurrGame{
+		Initiator:  initiator,
+		Challenger: challenger,
+		Uuid:       uuid,
+		Board:      board,
+	}
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.OpenGamePrefix(types.CurrGameKey, string(hashed)))
+
+	store.Set([]byte(uuid), k.cdc.MustMarshal(&game))
+
 }
