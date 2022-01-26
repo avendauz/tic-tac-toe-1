@@ -8,6 +8,15 @@ option go_package = "github.com/avendauz/tic-tac-toe-1/x/tictactoe1/types";
 // Msg defines the Msg service.
 service Msg {
     // this line is used by starport scaffolding # proto/tx/rpc
+  rpc OpenGame(MsgOpenGame) returns (MsgOpenGameResponse);
 }
 
 // this line is used by starport scaffolding # proto/tx/message
+
+message MsgOpenGame {
+  string creator = 1;
+  string uuid = 2;
+}
+
+message MsgOpenGameResponse {
+}

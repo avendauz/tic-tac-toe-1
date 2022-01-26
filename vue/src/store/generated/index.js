@@ -1,4 +1,5 @@
 // THIS FILE IS GENERATED AUTOMATICALLY. DO NOT MODIFY.
+import AvendauzTicTacToe1AvendauzTictactoe1Tictactoe1 from './avendauz/tic-tac-toe-1/avendauz.tictactoe1.tictactoe1';
 import CosmosCosmosSdkCosmosAuthzV1Beta1 from './cosmos/cosmos-sdk/cosmos.authz.v1beta1';
 import CosmosCosmosSdkCosmosBankV1Beta1 from './cosmos/cosmos-sdk/cosmos.bank.v1beta1';
 import CosmosCosmosSdkCosmosCrisisV1Beta1 from './cosmos/cosmos-sdk/cosmos.crisis.v1beta1';
@@ -11,6 +12,7 @@ import CosmosCosmosSdkCosmosStakingV1Beta1 from './cosmos/cosmos-sdk/cosmos.stak
 import CosmosCosmosSdkCosmosVestingV1Beta1 from './cosmos/cosmos-sdk/cosmos.vesting.v1beta1';
 import CosmosIbcGoIbcApplicationsTransferV1 from './cosmos/ibc-go/ibc.applications.transfer.v1';
 export default {
+    AvendauzTicTacToe1AvendauzTictactoe1Tictactoe1: load(AvendauzTicTacToe1AvendauzTictactoe1Tictactoe1, 'avendauz.tictactoe1.tictactoe1'),
     CosmosCosmosSdkCosmosAuthzV1Beta1: load(CosmosCosmosSdkCosmosAuthzV1Beta1, 'cosmos.authz.v1beta1'),
     CosmosCosmosSdkCosmosBankV1Beta1: load(CosmosCosmosSdkCosmosBankV1Beta1, 'cosmos.bank.v1beta1'),
     CosmosCosmosSdkCosmosCrisisV1Beta1: load(CosmosCosmosSdkCosmosCrisisV1Beta1, 'cosmos.crisis.v1beta1'),
