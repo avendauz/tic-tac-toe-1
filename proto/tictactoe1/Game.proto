@@ -11,10 +11,11 @@ message OpenGame {
 }
 
 message CurrGame {
-  string initiator = 1;
-  string challenger = 2;
+  string x = 1;
+  string o = 2;
   string uuid = 3;
   bytes board = 4;
+  string turn = 5;
 }
 
 message DoneGame {

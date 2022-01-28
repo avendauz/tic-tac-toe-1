@@ -5,10 +5,11 @@ export interface OpenGame {
     uuid: string;
 }
 export interface CurrGame {
-    initiator: string;
-    challenger: string;
+    x: string;
+    o: string;
     uuid: string;
     board: Uint8Array;
+    turn: string;
 }
 export interface DoneGame {
     initiator: string;

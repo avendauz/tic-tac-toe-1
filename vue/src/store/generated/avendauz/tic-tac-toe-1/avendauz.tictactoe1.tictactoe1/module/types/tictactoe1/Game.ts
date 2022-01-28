@@ -9,10 +9,11 @@ export interface OpenGame {
 }
 
 export interface CurrGame {
-  initiator: string;
-  challenger: string;
+  x: string;
+  o: string;
   uuid: string;
   board: Uint8Array;
+  turn: string;
 }
 
 export interface DoneGame {
@@ -95,21 +96,24 @@ export const OpenGame = {
   },
 };
 
-const baseCurrGame: object = { initiator: "", challenger: "", uuid: "" };
+const baseCurrGame: object = { x: "", o: "", uuid: "", turn: "" };
 
 export const CurrGame = {
   encode(message: CurrGame, writer: Writer = Writer.create()): Writer {
-    if (message.initiator !== "") {
-      writer.uint32(10).string(message.initiator);
+    if (message.x !== "") {
+      writer.uint32(10).string(message.x);
     }
-    if (message.challenger !== "") {
-      writer.uint32(18).string(message.challenger);
+    if (message.o !== "") {
+      writer.uint32(18).string(message.o);
     }
     if (message.uuid !== "") {
       writer.uint32(26).string(message.uuid);
     }
     if (message.board.length !== 0) {
       writer.uint32(34).bytes(message.board);
+    }
+    if (message.turn !== "") {
+      writer.uint32(42).string(message.turn);
     }
     return writer;
   },
@@ -122,16 +126,19 @@ export const CurrGame = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.initiator = reader.string();
+          message.x = reader.string();
           break;
         case 2:
-          message.challenger = reader.string();
+          message.o = reader.string();
           break;
         case 3:
           message.uuid = reader.string();
           break;
         case 4:
           message.board = reader.bytes();
+          break;
+        case 5:
+          message.turn = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -143,15 +150,15 @@ export const CurrGame = {
 
   fromJSON(object: any): CurrGame {
     const message = { ...baseCurrGame } as CurrGame;
-    if (object.initiator !== undefined && object.initiator !== null) {
-      message.initiator = String(object.initiator);
+    if (object.x !== undefined && object.x !== null) {
+      message.x = String(object.x);
     } else {
-      message.initiator = "";
+      message.x = "";
     }
-    if (object.challenger !== undefined && object.challenger !== null) {
-      message.challenger = String(object.challenger);
+    if (object.o !== undefined && object.o !== null) {
+      message.o = String(object.o);
     } else {
-      message.challenger = "";
+      message.o = "";
     }
     if (object.uuid !== undefined && object.uuid !== null) {
       message.uuid = String(object.uuid);
@@ -161,32 +168,38 @@ export const CurrGame = {
     if (object.board !== undefined && object.board !== null) {
       message.board = bytesFromBase64(object.board);
     }
+    if (object.turn !== undefined && object.turn !== null) {
+      message.turn = String(object.turn);
+    } else {
+      message.turn = "";
+    }
     return message;
   },
 
   toJSON(message: CurrGame): unknown {
     const obj: any = {};
-    message.initiator !== undefined && (obj.initiator = message.initiator);
-    message.challenger !== undefined && (obj.challenger = message.challenger);
+    message.x !== undefined && (obj.x = message.x);
+    message.o !== undefined && (obj.o = message.o);
     message.uuid !== undefined && (obj.uuid = message.uuid);
     message.board !== undefined &&
       (obj.board = base64FromBytes(
         message.board !== undefined ? message.board : new Uint8Array()
       ));
+    message.turn !== undefined && (obj.turn = message.turn);
     return obj;
   },
 
   fromPartial(object: DeepPartial<CurrGame>): CurrGame {
     const message = { ...baseCurrGame } as CurrGame;
-    if (object.initiator !== undefined && object.initiator !== null) {
-      message.initiator = object.initiator;
+    if (object.x !== undefined && object.x !== null) {
+      message.x = object.x;
     } else {
-      message.initiator = "";
+      message.x = "";
     }
-    if (object.challenger !== undefined && object.challenger !== null) {
-      message.challenger = object.challenger;
+    if (object.o !== undefined && object.o !== null) {
+      message.o = object.o;
     } else {
-      message.challenger = "";
+      message.o = "";
     }
     if (object.uuid !== undefined && object.uuid !== null) {
       message.uuid = object.uuid;
@@ -197,6 +210,11 @@ export const CurrGame = {
       message.board = object.board;
     } else {
       message.board = new Uint8Array();
+    }
+    if (object.turn !== undefined && object.turn !== null) {
+      message.turn = object.turn;
+    } else {
+      message.turn = "";
     }
     return message;
   },

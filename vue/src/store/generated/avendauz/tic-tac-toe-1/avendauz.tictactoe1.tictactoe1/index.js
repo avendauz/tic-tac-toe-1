@@ -144,23 +144,6 @@ export default {
                 throw new SpVuexError('QueryClient:QueryAllOpenGames', 'API Node Unavailable. Could not perform query: ' + e.message);
             }
         },
-        async sendMsgAcceptGame({ rootGetters }, { value, fee = [], memo = '' }) {
-            try {
-                const txClient = await initTxClient(rootGetters);
-                const msg = await txClient.msgAcceptGame(value);
-                const result = await txClient.signAndBroadcast([msg], { fee: { amount: fee,
-                        gas: "200000" }, memo });
-                return result;
-            }
-            catch (e) {
-                if (e == MissingWalletError) {
-                    throw new SpVuexError('TxClient:MsgAcceptGame:Init', 'Could not initialize signing client. Wallet is required.');
-                }
-                else {
-                    throw new SpVuexError('TxClient:MsgAcceptGame:Send', 'Could not broadcast Tx: ' + e.message);
-                }
-            }
-        },
         async sendMsgOpenGame({ rootGetters }, { value, fee = [], memo = '' }) {
             try {
                 const txClient = await initTxClient(rootGetters);
@@ -178,18 +161,20 @@ export default {
                 }
             }
         },
-        async MsgAcceptGame({ rootGetters }, { value }) {
+        async sendMsgAcceptGame({ rootGetters }, { value, fee = [], memo = '' }) {
             try {
                 const txClient = await initTxClient(rootGetters);
                 const msg = await txClient.msgAcceptGame(value);
-                return msg;
+                const result = await txClient.signAndBroadcast([msg], { fee: { amount: fee,
+                        gas: "200000" }, memo });
+                return result;
             }
             catch (e) {
                 if (e == MissingWalletError) {
                     throw new SpVuexError('TxClient:MsgAcceptGame:Init', 'Could not initialize signing client. Wallet is required.');
                 }
                 else {
-                    throw new SpVuexError('TxClient:MsgAcceptGame:Create', 'Could not create message: ' + e.message);
+                    throw new SpVuexError('TxClient:MsgAcceptGame:Send', 'Could not broadcast Tx: ' + e.message);
                 }
             }
         },
@@ -205,6 +190,21 @@ export default {
                 }
                 else {
                     throw new SpVuexError('TxClient:MsgOpenGame:Create', 'Could not create message: ' + e.message);
+                }
+            }
+        },
+        async MsgAcceptGame({ rootGetters }, { value }) {
+            try {
+                const txClient = await initTxClient(rootGetters);
+                const msg = await txClient.msgAcceptGame(value);
+                return msg;
+            }
+            catch (e) {
+                if (e == MissingWalletError) {
+                    throw new SpVuexError('TxClient:MsgAcceptGame:Init', 'Could not initialize signing client. Wallet is required.');
+                }
+                else {
+                    throw new SpVuexError('TxClient:MsgAcceptGame:Create', 'Could not create message: ' + e.message);
                 }
             }
         },

@@ -23,13 +23,8 @@ func (k Keeper) AddOGame (
 	uuid string,
 	) {
 
-	//var newGame = types.OpenGame{
-	//	Initiator: initiator,
-	//	Uuid: uuid,
-	//}
-
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.OpenGameKey))
-	//v := k.cdc.MustMarshal(&newGame)
+
 	store.Set(CreateOpenGameKey(initiator, uuid), make([]byte, 0))
 }
 
@@ -86,20 +81,32 @@ func (k Keeper) GetAllInitiatorsOGames (ctx sdk.Context, initiator string) []str
 	return keys
 }
 
+func FirstBitIsZero (hash []byte) bool {
+	return hash[0] != 0
+}
+
 func (k Keeper) AddCurrGame (ctx sdk.Context, initiator string, uuid string, challenger string) {
 	hashed := HashOpponents(initiator, challenger)
+
+	x := initiator
+	o := challenger
+
+	if FirstBitIsZero(hashed) {
+		x = challenger
+		o = initiator
+	}
 
 	board := make([]byte, 9)		// initialize board, 9 cells
 
 	game := types.CurrGame{
-		Initiator:  initiator,
-		Challenger: challenger,
-		Uuid:       uuid,
-		Board:      board,
+		X:  x,
+		O: o,
+		Uuid: uuid,
+		Board: board,
+		Turn: x,
 	}
 
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.OpenGamePrefix(types.CurrGameKey, string(hashed)))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CurrGameKey))
 
-	store.Set([]byte(uuid), k.cdc.MustMarshal(&game))
-
+	store.Set(CreateOpenGameKey(initiator, uuid), k.cdc.MustMarshal(&game))
 }
