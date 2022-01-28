@@ -4,13 +4,15 @@ import { StdFee } from "@cosmjs/launchpad";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgOpenGame } from "./types/tictactoe1/tx";
+import { MsgMove } from "./types/tictactoe1/tx";
 import { MsgAcceptGame } from "./types/tictactoe1/tx";
+import { MsgOpenGame } from "./types/tictactoe1/tx";
 
 
 const types = [
-  ["/avendauz.tictactoe1.tictactoe1.MsgOpenGame", MsgOpenGame],
+  ["/avendauz.tictactoe1.tictactoe1.MsgMove", MsgMove],
   ["/avendauz.tictactoe1.tictactoe1.MsgAcceptGame", MsgAcceptGame],
+  ["/avendauz.tictactoe1.tictactoe1.MsgOpenGame", MsgOpenGame],
   
 ];
 export const MissingWalletError = new Error("wallet is required");
@@ -43,8 +45,9 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
-    msgOpenGame: (data: MsgOpenGame): EncodeObject => ({ typeUrl: "/avendauz.tictactoe1.tictactoe1.MsgOpenGame", value: MsgOpenGame.fromPartial( data ) }),
+    msgMove: (data: MsgMove): EncodeObject => ({ typeUrl: "/avendauz.tictactoe1.tictactoe1.MsgMove", value: MsgMove.fromPartial( data ) }),
     msgAcceptGame: (data: MsgAcceptGame): EncodeObject => ({ typeUrl: "/avendauz.tictactoe1.tictactoe1.MsgAcceptGame", value: MsgAcceptGame.fromPartial( data ) }),
+    msgOpenGame: (data: MsgOpenGame): EncodeObject => ({ typeUrl: "/avendauz.tictactoe1.tictactoe1.MsgOpenGame", value: MsgOpenGame.fromPartial( data ) }),
     
   };
 };

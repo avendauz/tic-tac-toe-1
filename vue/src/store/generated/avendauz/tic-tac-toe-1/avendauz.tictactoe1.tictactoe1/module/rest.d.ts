@@ -8,6 +8,7 @@ export interface RpcStatus {
     details?: ProtobufAny[];
 }
 export declare type Tictactoe1MsgAcceptGameResponse = object;
+export declare type Tictactoe1MsgMoveResponse = object;
 export declare type Tictactoe1MsgOpenGameResponse = object;
 /**
  * Params defines the parameters for the module.

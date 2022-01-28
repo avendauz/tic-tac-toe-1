@@ -224,6 +224,146 @@ export const MsgAcceptGameResponse = {
         return message;
     },
 };
+const baseMsgMove = { creator: "", uuid: "", player: "", cell: 0 };
+export const MsgMove = {
+    encode(message, writer = Writer.create()) {
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.uuid !== "") {
+            writer.uint32(18).string(message.uuid);
+        }
+        if (message.player !== "") {
+            writer.uint32(26).string(message.player);
+        }
+        if (message.cell !== 0) {
+            writer.uint32(32).int32(message.cell);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgMove };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.uuid = reader.string();
+                    break;
+                case 3:
+                    message.player = reader.string();
+                    break;
+                case 4:
+                    message.cell = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgMove };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.uuid !== undefined && object.uuid !== null) {
+            message.uuid = String(object.uuid);
+        }
+        else {
+            message.uuid = "";
+        }
+        if (object.player !== undefined && object.player !== null) {
+            message.player = String(object.player);
+        }
+        else {
+            message.player = "";
+        }
+        if (object.cell !== undefined && object.cell !== null) {
+            message.cell = Number(object.cell);
+        }
+        else {
+            message.cell = 0;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.uuid !== undefined && (obj.uuid = message.uuid);
+        message.player !== undefined && (obj.player = message.player);
+        message.cell !== undefined && (obj.cell = message.cell);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgMove };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.uuid !== undefined && object.uuid !== null) {
+            message.uuid = object.uuid;
+        }
+        else {
+            message.uuid = "";
+        }
+        if (object.player !== undefined && object.player !== null) {
+            message.player = object.player;
+        }
+        else {
+            message.player = "";
+        }
+        if (object.cell !== undefined && object.cell !== null) {
+            message.cell = object.cell;
+        }
+        else {
+            message.cell = 0;
+        }
+        return message;
+    },
+};
+const baseMsgMoveResponse = {};
+export const MsgMoveResponse = {
+    encode(_, writer = Writer.create()) {
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgMoveResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(_) {
+        const message = { ...baseMsgMoveResponse };
+        return message;
+    },
+    toJSON(_) {
+        const obj = {};
+        return obj;
+    },
+    fromPartial(_) {
+        const message = { ...baseMsgMoveResponse };
+        return message;
+    },
+};
 export class MsgClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
@@ -237,5 +377,10 @@ export class MsgClientImpl {
         const data = MsgAcceptGame.encode(request).finish();
         const promise = this.rpc.request("avendauz.tictactoe1.tictactoe1.Msg", "AcceptGame", data);
         return promise.then((data) => MsgAcceptGameResponse.decode(new Reader(data)));
+    }
+    Move(request) {
+        const data = MsgMove.encode(request).finish();
+        const promise = this.rpc.request("avendauz.tictactoe1.tictactoe1.Msg", "Move", data);
+        return promise.then((data) => MsgMoveResponse.decode(new Reader(data)));
     }
 }

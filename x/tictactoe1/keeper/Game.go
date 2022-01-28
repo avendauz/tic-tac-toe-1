@@ -13,7 +13,7 @@ func HashOpponents (initiator string, challenger string) []byte {
 	return hasher.Sum(nil)
 }
 
-func CreateOpenGameKey (initiator string, uuid string) []byte {
+func CreateGameKey(initiator string, uuid string) []byte {
 	return []byte(initiator + "\x00" + uuid)
 }
 
@@ -25,7 +25,7 @@ func (k Keeper) AddOGame (
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.OpenGameKey))
 
-	store.Set(CreateOpenGameKey(initiator, uuid), make([]byte, 0))
+	store.Set(CreateGameKey(initiator, uuid), make([]byte, 0))
 }
 
 func (k Keeper) HasOpenGame (
@@ -36,7 +36,7 @@ func (k Keeper) HasOpenGame (
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.OpenGameKey))
 
-	return store.Has(CreateOpenGameKey(initiator, uuid))
+	return store.Has(CreateGameKey(initiator, uuid))
 }
 
 func (k Keeper) RemoveOpenGame (
@@ -46,7 +46,7 @@ func (k Keeper) RemoveOpenGame (
 	) {
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.OpenGameKey))
-	store.Delete(CreateOpenGameKey(initiator, uuid))
+	store.Delete(CreateGameKey(initiator, uuid))
 }
 
 func (k Keeper) GetAllOGames (ctx sdk.Context) []string {
@@ -108,5 +108,43 @@ func (k Keeper) AddCurrGame (ctx sdk.Context, initiator string, uuid string, cha
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CurrGameKey))
 
-	store.Set(CreateOpenGameKey(initiator, uuid), k.cdc.MustMarshal(&game))
+	store.Set(CreateGameKey(initiator, uuid), k.cdc.MustMarshal(&game))
+}
+
+func (k Keeper) SetCurrGame (ctx sdk.Context, initiator string, uuid string, game types.CurrGame) {
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CurrGameKey))
+
+	store.Set(CreateGameKey(initiator, uuid), k.cdc.MustMarshal(&game))
+}
+
+
+func (k Keeper) HasCurrGame (
+	ctx sdk.Context,
+	initiator string,
+	uuid string,
+) bool {
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CurrGameKey))
+
+	return store.Has(CreateGameKey(initiator, uuid))
+}
+
+
+func (k Keeper) GetCurrGame (ctx sdk.Context, initiator string, uuid string) (types.CurrGame, error) {
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CurrGameKey))
+
+	var currGame types.CurrGame
+	v := store.Get(CreateGameKey(initiator, uuid))
+
+	err := k.cdc.Unmarshal(v, &currGame)
+
+	if err!= nil {
+		return types.CurrGame{
+
+		}, err
+	}
+
+	return currGame, nil
 }

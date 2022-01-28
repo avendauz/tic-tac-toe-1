@@ -10,6 +10,7 @@ service Msg {
     // this line is used by starport scaffolding # proto/tx/rpc
   rpc OpenGame(MsgOpenGame) returns (MsgOpenGameResponse);
   rpc AcceptGame(MsgAcceptGame) returns (MsgAcceptGameResponse);
+  rpc Move(MsgMove) returns (MsgMoveResponse);
 
 }
 
@@ -30,5 +31,16 @@ message MsgAcceptGame {
 }
 
 message MsgAcceptGameResponse {
+
+}
+
+message MsgMove {
+  string creator = 1;
+  string uuid = 2;
+  string player = 3;
+  int32 cell = 4;
+}
+
+message MsgMoveResponse {
 
 }

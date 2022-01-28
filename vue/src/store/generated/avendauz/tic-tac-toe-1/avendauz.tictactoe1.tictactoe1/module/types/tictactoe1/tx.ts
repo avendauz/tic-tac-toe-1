@@ -18,6 +18,15 @@ export interface MsgAcceptGame {
 
 export interface MsgAcceptGameResponse {}
 
+export interface MsgMove {
+  creator: string;
+  uuid: string;
+  player: string;
+  cell: number;
+}
+
+export interface MsgMoveResponse {}
+
 const baseMsgOpenGame: object = { creator: "", uuid: "" };
 
 export const MsgOpenGame = {
@@ -255,11 +264,156 @@ export const MsgAcceptGameResponse = {
   },
 };
 
+const baseMsgMove: object = { creator: "", uuid: "", player: "", cell: 0 };
+
+export const MsgMove = {
+  encode(message: MsgMove, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.uuid !== "") {
+      writer.uint32(18).string(message.uuid);
+    }
+    if (message.player !== "") {
+      writer.uint32(26).string(message.player);
+    }
+    if (message.cell !== 0) {
+      writer.uint32(32).int32(message.cell);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgMove {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgMove } as MsgMove;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.uuid = reader.string();
+          break;
+        case 3:
+          message.player = reader.string();
+          break;
+        case 4:
+          message.cell = reader.int32();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgMove {
+    const message = { ...baseMsgMove } as MsgMove;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.uuid !== undefined && object.uuid !== null) {
+      message.uuid = String(object.uuid);
+    } else {
+      message.uuid = "";
+    }
+    if (object.player !== undefined && object.player !== null) {
+      message.player = String(object.player);
+    } else {
+      message.player = "";
+    }
+    if (object.cell !== undefined && object.cell !== null) {
+      message.cell = Number(object.cell);
+    } else {
+      message.cell = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: MsgMove): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.uuid !== undefined && (obj.uuid = message.uuid);
+    message.player !== undefined && (obj.player = message.player);
+    message.cell !== undefined && (obj.cell = message.cell);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgMove>): MsgMove {
+    const message = { ...baseMsgMove } as MsgMove;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.uuid !== undefined && object.uuid !== null) {
+      message.uuid = object.uuid;
+    } else {
+      message.uuid = "";
+    }
+    if (object.player !== undefined && object.player !== null) {
+      message.player = object.player;
+    } else {
+      message.player = "";
+    }
+    if (object.cell !== undefined && object.cell !== null) {
+      message.cell = object.cell;
+    } else {
+      message.cell = 0;
+    }
+    return message;
+  },
+};
+
+const baseMsgMoveResponse: object = {};
+
+export const MsgMoveResponse = {
+  encode(_: MsgMoveResponse, writer: Writer = Writer.create()): Writer {
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgMoveResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgMoveResponse } as MsgMoveResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgMoveResponse {
+    const message = { ...baseMsgMoveResponse } as MsgMoveResponse;
+    return message;
+  },
+
+  toJSON(_: MsgMoveResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: DeepPartial<MsgMoveResponse>): MsgMoveResponse {
+    const message = { ...baseMsgMoveResponse } as MsgMoveResponse;
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   /** this line is used by starport scaffolding # proto/tx/rpc */
   OpenGame(request: MsgOpenGame): Promise<MsgOpenGameResponse>;
   AcceptGame(request: MsgAcceptGame): Promise<MsgAcceptGameResponse>;
+  Move(request: MsgMove): Promise<MsgMoveResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -287,6 +441,16 @@ export class MsgClientImpl implements Msg {
     return promise.then((data) =>
       MsgAcceptGameResponse.decode(new Reader(data))
     );
+  }
+
+  Move(request: MsgMove): Promise<MsgMoveResponse> {
+    const data = MsgMove.encode(request).finish();
+    const promise = this.rpc.request(
+      "avendauz.tictactoe1.tictactoe1.Msg",
+      "Move",
+      data
+    );
+    return promise.then((data) => MsgMoveResponse.decode(new Reader(data)));
   }
 }
 

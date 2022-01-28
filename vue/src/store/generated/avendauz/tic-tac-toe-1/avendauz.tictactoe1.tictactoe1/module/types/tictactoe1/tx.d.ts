@@ -13,6 +13,14 @@ export interface MsgAcceptGame {
 }
 export interface MsgAcceptGameResponse {
 }
+export interface MsgMove {
+    creator: string;
+    uuid: string;
+    player: string;
+    cell: number;
+}
+export interface MsgMoveResponse {
+}
 export declare const MsgOpenGame: {
     encode(message: MsgOpenGame, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgOpenGame;
@@ -41,17 +49,33 @@ export declare const MsgAcceptGameResponse: {
     toJSON(_: MsgAcceptGameResponse): unknown;
     fromPartial(_: DeepPartial<MsgAcceptGameResponse>): MsgAcceptGameResponse;
 };
+export declare const MsgMove: {
+    encode(message: MsgMove, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgMove;
+    fromJSON(object: any): MsgMove;
+    toJSON(message: MsgMove): unknown;
+    fromPartial(object: DeepPartial<MsgMove>): MsgMove;
+};
+export declare const MsgMoveResponse: {
+    encode(_: MsgMoveResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgMoveResponse;
+    fromJSON(_: any): MsgMoveResponse;
+    toJSON(_: MsgMoveResponse): unknown;
+    fromPartial(_: DeepPartial<MsgMoveResponse>): MsgMoveResponse;
+};
 /** Msg defines the Msg service. */
 export interface Msg {
     /** this line is used by starport scaffolding # proto/tx/rpc */
     OpenGame(request: MsgOpenGame): Promise<MsgOpenGameResponse>;
     AcceptGame(request: MsgAcceptGame): Promise<MsgAcceptGameResponse>;
+    Move(request: MsgMove): Promise<MsgMoveResponse>;
 }
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
     constructor(rpc: Rpc);
     OpenGame(request: MsgOpenGame): Promise<MsgOpenGameResponse>;
     AcceptGame(request: MsgAcceptGame): Promise<MsgAcceptGameResponse>;
+    Move(request: MsgMove): Promise<MsgMoveResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;

@@ -22,6 +22,8 @@ export interface RpcStatus {
 
 export type Tictactoe1MsgAcceptGameResponse = object;
 
+export type Tictactoe1MsgMoveResponse = object;
+
 export type Tictactoe1MsgOpenGameResponse = object;
 
 /**
