@@ -24,11 +24,18 @@ func (k Keeper) Move (goCtx context.Context, req *types.MsgMove) (*types.MsgMove
 	var turn string
 
 	if req.Player == game.X {
+
+		if game.Board[req.Cell] != 0 {
+			return nil, sdkerrors.New("tictactoe1", 2, "Invalid move")
+		}
 		game.Board[req.Cell] = 2
 		turn = game.O
 	}
 
 	if req.Player == game.O {
+		if game.Board[req.Cell] != 0 {
+			return nil, sdkerrors.New("tictactoe1", 2, "Invalid move")
+		}
 		game.Board[req.Cell] = 1
 		turn = game.X
 	}
