@@ -50,6 +50,10 @@ func (k Keeper) Move (goCtx context.Context, req *types.MsgMove) (*types.MsgMove
 
 	k.SetCurrGame(ctx, req.Creator, req.Uuid, updatedGame)
 
+	if k.CheckEndgame(updatedGame.Board) {
+		k.RemoveCurrGame(ctx, req.Creator, req.Uuid)
+	}
+
 	return &types.MsgMoveResponse{}, nil
 
 }

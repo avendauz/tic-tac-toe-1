@@ -130,6 +130,16 @@ func (k Keeper) HasCurrGame (
 	return store.Has(CreateGameKey(initiator, uuid))
 }
 
+func (k Keeper) RemoveCurrGame (
+	ctx sdk.Context,
+	initiator string,
+	uuid string,
+) {
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CurrGameKey))
+	store.Delete(CreateGameKey(initiator, uuid))
+}
+
 
 func (k Keeper) GetCurrGame (ctx sdk.Context, initiator string, uuid string) (types.CurrGame, error) {
 
@@ -147,4 +157,18 @@ func (k Keeper) GetCurrGame (ctx sdk.Context, initiator string, uuid string) (ty
 	}
 
 	return currGame, nil
+}
+
+func (k Keeper) CheckEndgame (board []byte) bool {
+
+	a := board[0] == board[1] && board[1] == board [2]
+	b:= board[0] == board[3] && board[3] == board [6]
+	c := board[0] == board[4] && board[4] == board [8]
+	d := board[3] == board[4] && board[4] == board [5]
+	e := board[1] == board[4] && board[4] == board [7]
+	f := board[6] == board[7] && board[7] == board [8]
+	g := board[2] == board[5] && board[5] == board [8]
+	h := board[2] == board[4] && board[4] == board [6]
+
+	return a || b || c || d || e || f || g || h
 }
